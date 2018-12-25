@@ -1,0 +1,106 @@
+program zapisi;
+
+type
+  sport = record
+    fio: string[15];
+    vid: string[15];
+    razr: 1..10;
+    ochki: real;
+  end;
+
+var
+  a: array[1..10] of sport;
+  i, j, n: integer;
+  ch: sport;
+  lishnii: string;
+
+
+
+begin
+  writeln('Vvedite kolvo sportsmenov: ');
+  readln(n);
+  if n > 0 then
+  begin
+    for i := 3 to (n+2) do 
+      with a[i] do
+      begin
+        write('Vvedite FIO ', i-2, ' sportsmena: ');
+        readln(a[i].fio); 
+        write('Vid sporta: ');
+        readln(a[i].vid);
+        write('Razryad: ');
+        readln(a[i].razr);
+        write('Kolvo ochkov: ');
+        readln(a[i].ochki);
+      end;
+  end
+  else writeln('error');
+  
+  writeln('Vvedite vid sporta, kotoriy nado udalit');
+  readln(lishnii);
+  
+  
+  
+  
+  
+  
+  for i := 3 to n-1 do 
+    for j := i + 1 to n do
+      
+      if a[i].fio > a[j].fio then
+      begin
+        ch := a[i];
+        a[i] := a[j];
+        a[j] := ch;
+      end;
+  
+  
+  writeln('Vvedite dopolnitelhih sportsmenov');
+  for i := 1 to 2 do 
+    with a[i] do
+    begin
+      write('Vvedite FIO ', i, ' sportsmena: ');
+      readln(a[i].fio); 
+      write('Vid sporta: ');
+      readln(a[i].vid);
+      write('Razryad: ');
+      readln(a[i].razr);
+      write('Kolvo ochkov: ');
+      readln(a[i].ochki);
+    end;
+  
+  
+  writeln; 
+  writeln('Soisok sportsmenov');
+  for i := 1 to 58 do write('-'); 
+  writeln;
+  write('|      FIO      |  Vid  sporta  | Razryad | Kolvo ochkov |');
+  writeln;
+  for i := 1 to 58 do write('-'); 
+  writeln;
+  
+  
+  for i := 1 to 2 do 
+    with a[i] do
+    begin
+      
+      write('|', fio:14, ' |', vid:15, '|', razr:9, '|', ochki:14, '|'); 
+      writeln;
+      
+      for j := 1 to 58 do write('-'); 
+      writeln;
+    end;
+  
+  for i := 3 to n+2 do
+    with a[i] do
+    begin
+      if a[i].vid <> lishnii then 
+      begin
+        write('|', fio:14, ' |', vid:15, '|', razr:9, '|', ochki:14, '|'); 
+        writeln;
+        
+        for j := 1 to 58 do write('-'); 
+        writeln;
+      end;
+    end;
+end.   
