@@ -1,0 +1,168 @@
+const
+  nmax = 10;
+
+type
+  tzap = record 
+    street: string[15]; 
+    Nomer: string[15]; 
+    Tip: string[15]; 
+    Kolvo_kv:string[15]; 
+    S:string[15]; 
+  end;
+  
+  tfile = file of tzap;
+  tmas = array[1..nmax] of tzap;
+
+var
+  a: tmas; 
+  f, fnew: tfile; 
+  mas: tzap; 
+  n,i: integer; 
+  name: string;
+
+procedure Input(var f: tfile; n: integer; name: string[15]);
+begin
+  writeln('Input name of file: '); 
+  readln(name); 
+  if not fileexists(name) then
+  begin
+    writeln('Error');
+    halt;
+  end else
+  begin
+    AssignFile(f, name); 
+    rewrite(f); 
+    repeat
+    writeln;
+      writeln('Enter the number of houses'); 
+      readln(n); 
+    until n > 0; 
+    for var i := 0 to (n - 1) do 
+    begin
+    writeln;
+      writeln('Nomber of ', i + 1, ' house'); 
+      write('Street: '); 
+      readln(mas.street);
+      write('Number: '); 
+      readln(mas.Nomer); 
+      write('Type: '); 
+      readln(mas.Tip); 
+      write('Number of the appertament:'); 
+      readln(mas.Kolvo_kv); 
+      write('Total area: '); 
+      readln(mas.S); 
+      write(f, mas);
+    end; 
+    closefile(f); 
+    writeln('File is ready'); 
+    readln; 
+  end;
+end;
+
+procedure Output(var f: tfile; var n: integer);
+begin
+  reset(f); 
+  writeln('In file: '); 
+  writeln('_____________________________________'); 
+  for var i := 0 to (n - 1) do 
+  begin
+    writeln('//'); 
+    write('Stret: '); 
+    writeln(mas.street); 
+    write('Number: '); 
+    writeln(mas.Nomer); 
+    write('Type: '); 
+    writeln(mas.Tip); 
+    write('Number of the appatrament: '); 
+    writeln(mas.Kolvo_kv); 
+    write('Total area: '); 
+    writeln(mas.S); 
+  end;  
+  writeln('_____________________________________'); 
+  i := 0;
+  while not eof(f) do 
+  begin
+    read(f, mas); 
+    inc(i); 
+    writeln(i:3, mas.street:15, mas.Nomer:5, mas.Tip:5, mas.Kolvo_kv:5, mas.S:5 ); 
+  end; 
+  closefile(f); 
+end;
+
+procedure Delete(var f: tfile; var fnew: tfile);
+var
+  t: string;
+begin
+  reset(f); 
+  reset(fnew); 
+  writeln('Delete houses');
+  write('Enter the type of house to be removed from the list: ');
+  readln(t); 
+  reset(f); 
+  while not eof(f) do 
+  begin
+    read(f, mas); 
+    if mas.Tip <> t then 
+      write(fnew, mas); 
+  end; 
+  closefile(f); 
+  closefile(fnew); 
+end;
+
+procedure Add(var f, fnew: tfile);
+var
+  n: integer; 
+  LStreet, LNomer: string;
+begin
+  reset(fnew); 
+  rewrite(f); 
+  writeln('Where input?'); 
+  write('Input the street: '); 
+  read(LStreet); 
+  write('Input the nomber of house: '); 
+  readln(LNomer);  
+  for var i := 0 to (n - 1) do 
+  begin
+    if (mas.Street = Lstreet) and (mas.Nomer = LNomer) 
+    then 
+    begin
+      n := n + 1;  
+      for var j := (n - 1) downto (i + 1) do 
+      begin
+        a[j] := a[j - 1]; 
+      end; 
+      writeln('Input new information: '); 
+      write('Street: '); 
+      readln(mas.street); 
+      write('Number: '); 
+      readln(mas.Nomer); 
+      write('Type: '); 
+      readln(mas.Tip); 
+      write('Number of the appertament:'); 
+      readln(mas.Kolvo_kv); 
+      write('Total area: '); 
+      readln(mas.S);  
+      write(f, mas);  
+    end; 
+    while not eof(fnew) do 
+    begin
+      read(fnew, mas); 
+      write(f, mas); 
+    end; 
+    closefile(f); 
+    closefile(fnew); 
+    erase(fnew); 
+  end;
+end;
+
+begin
+  Assignfile(fnew, 'temp.txt'); 
+  Input(f, n, name); 
+  Output(f, n); 
+  Delete(f, fnew); 
+  Output(fnew, n); 
+  Erase(f); 
+  Assignfile(f, 'File.txt'); 
+  Add( f, fnew);  
+  Readln; 
+end.
